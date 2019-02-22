@@ -13,6 +13,43 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/* Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+}); */
+
+Route::post('/login', 'AuthenticationController@login');
+
+Route::group(['middleware' => 'auth:api'], function () {
+    
+    Route::get('/expense-accounts', 'ExpenseAccountController@getExpenseAccounts');
+
+    Route::get('/renters', 'RenterController@getRenters');
+
+
+    // Transactions
+    Route::get('/transactions', 'TransactionController@getTransactions');
+
+    Route::get('/transactions/{id}', 'TransactionController@getTransaction');
+
+    Route::post('/transactions', 'TransactionController@createTransaction');
+
+    Route::delete('/transactions/{id}', 'TransactionController@deleteTransaction');
+
+    // Transactions
+
+    Route::post('/files', 'FileController@uploadFile');
+
+    Route::get('/files/{transactionID}', 'FileController@downloadFile');
+
+
+    Route::post('/logout', 'AuthenticationController@logout');
 });
+
+
+
+
+
+
+
+
+// Route::get('/transactions', 'TransactionController@getTransactions');

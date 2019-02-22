@@ -15,6 +15,13 @@
     "browser-sync": "^2.26.3",
     "browser-sync-webpack-plugin": "^2.0.1",
     "cross-env": "^5.1",
+    "eslint": "^5.13.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^5.1.0",
     "jquery": "^3.2",
     "laravel-mix": "^4.0.7",
     "lodash": "^4.17.5",
@@ -23,7 +30,10 @@
     "sass": "^1.15.2",
     "sass-loader": "^7.1.0",
     "vue": "^2.5.17",
-    "vue-template-compiler": "^2.5.22"
+    "vue-router": "^3.0.2",
+    "vue-template-compiler": "^2.5.22",
+    "vuex": "^3.1.0",
+    "webpack": "^4.29.3"
   },
   "name": "bookkeeping",
   "description": "<p align=\"center\"><img src=\"https://laravel.com/assets/img/components/logo-laravel.svg\"></p>",
@@ -35,6 +45,10 @@
   "author": "Thai Nguyen",
   "license": "ISC",
   "dependencies": {
+    "jspdf": "^1.5.3",
+    "jspdf-autotable": "^3.0.10",
+    "moment": "^2.24.0",
+    "vee-validate": "^2.1.7",
     "vuetify": "^1.4.4"
   }
 }

@@ -1,5 +1,5 @@
-const mix = require('laravel-mix');
-
+const mix = require("laravel-mix");
+const config = require("./webpack.config");
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -10,8 +10,7 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.webpackConfig(config);
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
-
-   mix.browserSync('local.bookkeeping.test:8888');
+mix.js("resources/js/app.js", "public/js")
+   .browserSync("local.bookkeeping.test:8888");

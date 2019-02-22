@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Los_Angeles',
 
     /*
     |--------------------------------------------------------------------------
@@ -162,9 +162,17 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
+        App\Bookkeeping\ExpenseAccount\ExpenseAccountServiceProvider::class,
+        App\Bookkeeping\Expense\ExpenseServiceProvider::class,
+        App\Bookkeeping\Transaction\TransactionServiceProvider::class,
+        App\Bookkeeping\Renter\RenterServiceProvider::class,
+        App\Bookkeeping\File\FileServiceProvider::class,
+        App\Bookkeeping\User\UserServiceProvider::class,
+        
 
         /*
          * Application Service Providers...
