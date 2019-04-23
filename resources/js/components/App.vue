@@ -6,7 +6,12 @@
 
 <script>
 export default {
-    name: "App"
+    name: "App",
+    created () {
+
+        this.$store.commit("INITIALIZE_STATE");
+
+    }
 };
 </script>
 

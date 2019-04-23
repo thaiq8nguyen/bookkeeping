@@ -5,7 +5,7 @@ namespace App\Bookkeeping\Transaction;
 use App\Transaction;
 use App\LineItem;
 use App\Renter;
-
+use App\Notifications\InvoiceCreated;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -28,7 +28,7 @@ class TransactionRepository implements TransactionInterface
         ->where('date', '>=', $year)
         ->orderBy('date', 'desc')
         ->get();
-        
+
 
         foreach ($transactions as $transaction) {
             $result = [
@@ -46,11 +46,13 @@ class TransactionRepository implements TransactionInterface
     public function getTransaction($transactionID)
     {
         $items = [];
-        
+
 
         $transaction = Transaction::find($transactionID);
 
-        $renter = $transaction->transactionable->makeHidden(['last_name','first_name','is_renting']);
+        $renter = $transaction
+            ->transactionable
+            ->makeHidden(['last_name','first_name','is_renting','email', 'phone_number']);
 
         $lineItems = $transaction->lineItems;
 
@@ -61,10 +63,16 @@ class TransactionRepository implements TransactionInterface
             array_push($items, $item);
         }
 
-        $results = ['renter' => $renter, 'transaction' => ['id' => $transaction->id, 'date' => $transaction->date],
-            'lineItems' => $items, 'fileID' => $file->id
+        $results = [
+            'renter' => $renter,
+            'transaction_id' => $transaction->id,
+            'date' => $transaction->date,
+            'due_date' => $transaction->due_date,
+            'invoicing_month' => $transaction->invoicing_month,
+            'lineItems' => $items, 'fileID' => $file->id,
+            'memo' => $transaction->memo
         ];
-        
+
         return $results;
     }
 
@@ -72,11 +80,19 @@ class TransactionRepository implements TransactionInterface
     {
         $renter = Renter::find($transaction['renterID']);
 
-        $newTransaction = $renter->transactions()->create(['date' => $transaction['date']]);
+        $newTransaction = $renter->transactions()->create(
+            ['date' => $transaction['date'], 'memo' => $transaction['memo']]
+        );
 
         foreach ($transaction['lineItems'] as $lineItem) {
             $item = LineItem::create(['transaction_id' => $newTransaction->id, 'account_id' => $lineItem['accountID'],
             'amount' => $lineItem['amount'], 'memo' => $lineItem['memo'], "reference" => $lineItem['reference']]);
+        }
+
+        $notification = $renter->notifications()->wherePivot('notification_id', 1)->first();
+
+        if ($notification->setting->is_active) {
+            $renter->notify(new InvoiceCreated($newTransaction));
         }
 
         return ['transactionID' => $newTransaction->id];
@@ -94,7 +110,7 @@ class TransactionRepository implements TransactionInterface
 
         $deletedTransaction = $transaction->delete();
 
-        
+
         return [
             'deletedTransaction' => $deletedTransaction,
             'deletedLineItems' => $deletedLineItems,

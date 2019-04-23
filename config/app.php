@@ -161,6 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Nexmo\Laravel\NexmoServiceProvider::class,
 
 
         /*
@@ -172,7 +173,7 @@ return [
         App\Bookkeeping\Renter\RenterServiceProvider::class,
         App\Bookkeeping\File\FileServiceProvider::class,
         App\Bookkeeping\User\UserServiceProvider::class,
-        
+
 
         /*
          * Application Service Providers...

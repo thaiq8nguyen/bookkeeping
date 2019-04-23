@@ -117,7 +117,7 @@
                                         <td class="text-sm-center primary_text--text subheading">{{ props.item.memo }}</td>
                                         <td class="text-sm-center primary_text--text subheading">{{ props.item.reference }}</td>
                                         <td class="text-sm-center primary_text--text subheading">
-                                            <v-icon class="primary--text" @click="deleteExpenseItem(props.item)">delete</v-icon>
+                                            <v-icon class="primary--text" @click="deleteInvoiceItem(props.item)">delete</v-icon>
                                         </td>
                                     </template>
                                     </v-data-table>
@@ -226,14 +226,14 @@
 
             },
             renters () {
-                
+
                 return this.$store.getters["Renters/renters"];
 
             },
             renter: {
 
                 get () {
-                    
+
                     return this.$store.getters["Renters/renter"];
 
                 },
@@ -270,10 +270,10 @@
                     this.$store.dispatch("Dialogs/showDialog", { name: "invoiceCreatedConfirmation", visibility: value });
 
                 }
-                
+
             },
             totalInvoiceAmount () {
-                
+
                 return this.$store.getters["Invoices/totalInvoiceAmount"];
 
             },
@@ -290,7 +290,7 @@
 
                 }
             }
-        
+
         },
         created () {
 
@@ -318,12 +318,12 @@
             createInvoice () {
 
                 this.$store.dispatch("Invoices/createAndUploadInvoice");
-                
+
             },
             downloadInvoice () {
 
                 this.$store.dispatch("Invoices/downloadInvoice");
-                
+
             },
             expenseAccountsLookUp (accountID) {
 

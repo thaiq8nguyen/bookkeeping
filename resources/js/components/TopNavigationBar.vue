@@ -6,9 +6,9 @@
 			absolute
 			clipped-left
 			>
-			<v-toolbar-side-icon class="white--text"></v-toolbar-side-icon>
+			<v-toolbar-side-icon class="white--text" to="/dashboard"></v-toolbar-side-icon>
 			<v-toolbar-title>
-				<span class="headline white--text">Dashboard</span>
+				<span class="headline white--text">{{ title }}</span>
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-menu offset-y>
@@ -29,11 +29,13 @@
 					</v-list-tile>
 				</v-list>
 			</v-menu>
+	        <v-btn flat class="white--text" to="/settings">Settings</v-btn>
 			<v-menu offset-y>
 				<v-btn slot="activator" class="white--text" flat>
                     {{ userFullName }}
 					<v-icon right>keyboard_arrow_down</v-icon>
 				</v-btn>
+
 				<v-list>
 					<template v-for="(item, key) in items">
 						<v-list-tile :key="key">
@@ -49,19 +51,25 @@
 <script>
     export default {
         name: "TopNavigationBar",
-        data () {
+	    props: {
+        	title: {
+        		default: "",
+		        type: String,
+	        }
+	    },
+		data () {
 
-            return {
-                newDialogs: [
+			return {
+				newDialogs: [
 
 					{ name: "Invoice", component: "createInvoice" }
-					
+
 				],
 				items: [
 					{ name: "Logout" }
 				]
 			};
-			
+
 		},
 
 		computed: {
@@ -82,10 +90,9 @@
 			logout () {
 
 				this.$store.dispatch("Authentications/logout");
-				
+
 			}
 		}
-
     };
 </script>
 

@@ -1,42 +1,53 @@
 <template>
     <div id="login">
         <v-app>
-            <v-content>
+            <v-content class="grey lighten-2">
+                <v-alert :value="alert" class="subheading success">You have logged out</v-alert>
                 <v-container fluid fill-height>
-            <v-layout justify-center align-center>
-                <v-flex sm4>
+                    <v-layout justify-center align-center>
+                        <v-flex sm4>
                     <v-card>
                         <v-card-title class="dark_primary">
                             <span class="headline white--text">Login</span>
                         </v-card-title>
-                        <v-form>
+                        <v-form @submit.prevent="validate">
                             <v-card-text>
                                 <v-text-field
                                     v-model="email"
+                                    v-validate="'required'"
+                                    data-vv-name="email"
+                                    :error-messages="errors.collect('email')"
                                     label="Email"
+                                    name="email"
+                                    type="text"
                                 >
                                 </v-text-field>
                                 <v-text-field
                                     v-model="password"
+                                    v-validate="'required'"
+                                    data-vv-name="password"
+                                    :error-messages="errors.collect('password')"
                                     label="Password"
+                                    name="password"
+                                    type="password"
                                 >
                                 </v-text-field>
                             </v-card-text>
                             <v-card-text v-if="errorMessage">
-                                <p class="danger--text">{{ errorMessage }}</p>
+                                <p class="subheading primary--text">{{ errorMessage }}</p>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn class="info" :loading="isAuthenticating" @click.prevent="login">Login</v-btn>
+                                <v-btn class="info" :loading="isAuthenticating" type="submit">Login</v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-card>
                 </v-flex>
-            </v-layout>
-        </v-container>
+                    </v-layout>
+                </v-container>
             </v-content>
-</v-app>
-</div>
+        </v-app>
+    </div>
 </template>
 
 <script>
@@ -46,12 +57,22 @@ export default {
 
         return {
             email: "",
-            password: ""
+            password: "",
+            dictionary: {
+                custom: {
+                    email: {
+                        required: "Enter your email",
+                    },
+                    password: {
+                        required: "Enter your password",
+                    },
+                }
+            }
         };
-    
+
     },
     computed: {
-        
+
         isAuthenticating () {
 
             return this.$store.getters["Authentications/isAuthenticating"];
@@ -61,16 +82,34 @@ export default {
         errorMessage () {
 
             return this.$store.getters["Authentications/errorMessage"];
-        
-}
+
+        },
+        alert () {
+
+            return this.$route.query.action === "logout";
+
+        }
     },
-    created () {
+    mounted () {
 
         this.$store.dispatch("Authentications/init");
+        this.$validator.localize("en", this.dictionary);
 
     },
     methods: {
-        
+        validate () {
+
+            this.$validator.validateAll().then((result) => {
+
+                if (result) {
+
+                    this.login();
+
+                }
+
+            });
+
+        },
         login () {
 
             this.$store.dispatch("Authentications/login", { email: this.email, password: this.password });

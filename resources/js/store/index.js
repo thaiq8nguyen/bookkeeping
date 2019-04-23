@@ -10,8 +10,12 @@ import Renters from "./modules/renters";
 import Dialogs from "./modules/dialogs";
 import Transactions from "./modules/transactions";
 import Authentications from "./modules/authentications";
+import Settings from "./modules/settings";
 
-import { saveState } from "./plugins/persist-states";
+import Plugins from "Plugins";
+
+let Services = new Vue();
+Vue.use(Plugins);
 
 // Plugins
 
@@ -19,12 +23,8 @@ const persistStates = (store) => {
 
     store.subscribe((mutation, state) => {
 
-        switch (mutation.type) {
+        Services.persistState.save(state);
 
-            case "Authentications/SET_AUTHENTICATION": saveState("authentications", mutation.payload);
-
-        }
-        
     });
 
 };
@@ -33,7 +33,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        Invoices, Renters, Dialogs, Transactions, Authentications
+        Invoices, Renters, Dialogs, Transactions, Authentications, Settings
     },
     state: {
 
@@ -41,7 +41,7 @@ export default new Vuex.Store({
 
     },
     getters,
-    
+
     actions,
 
     mutations,

@@ -24,7 +24,7 @@ class TransactionController extends BaseController
 
     public function getTransaction($id)
     {
-        return response()->json($this->transaction->getTransaction($id));      
+        return response()->json($this->transaction->getTransaction($id));
     }
 
     public function createTransaction(Request $request)

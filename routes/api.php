@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 Route::post('/login', 'AuthenticationController@login');
 
 Route::group(['middleware' => 'auth:api'], function () {
-    
+
     Route::get('/expense-accounts', 'ExpenseAccountController@getExpenseAccounts');
 
     Route::get('/renters', 'RenterController@getRenters');
@@ -44,6 +44,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/logout', 'AuthenticationController@logout');
 });
+
+Route::get('/settings/renters-notifications', 'RenterNotificationController@getSettings');
+
+Route::put('/settings/renters-notifications', 'RenterNotificationController@updateSettings');
+
 
 
 

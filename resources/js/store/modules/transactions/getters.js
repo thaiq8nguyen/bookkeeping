@@ -1,12 +1,11 @@
-import DateServices from "Services/date-services";
-import { totalmem } from "os";
+// TRANSACTIONS
 
 export default {
 
     transactions (state) {
 
         return state.transactions;
-        
+
     },
 
     transaction (state) {

@@ -1,9 +1,9 @@
 <template>
     <div id="dashboard">
         <v-app>
-            <top-navigation-bar></top-navigation-bar>
+            <top-navigation-bar :title="'Dashboard'"></top-navigation-bar>
             <v-content>
-                <recent-transactions></recent-transactions>  
+                <recent-transactions></recent-transactions>
             </v-content>
             <v-dialog
                 v-model="createInvoiceDialog"
@@ -13,7 +13,7 @@
                 >
                 <v-card>
                     <create-invoice></create-invoice>
-                </v-card>    
+                </v-card>
             </v-dialog>
         </v-app>
     </div>
@@ -23,14 +23,14 @@
     import TopNavigationBar from "Components/TopNavigationBar";
     import RecentTransactions from "Components/RecentTransactions";
     import CreateInvoice from "Components/CreateInvoice";
-    
+
     export default {
         name: "Dashboard",
         components: { TopNavigationBar, RecentTransactions, CreateInvoice },
         data () {
 
             return {
-                
+
             };
 
         },
@@ -41,9 +41,10 @@
 
             }
         },
-
+        mounted () {
+        },
         methods: {
-            
+
         }
     };
 </script>

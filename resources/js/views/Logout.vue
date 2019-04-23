@@ -22,7 +22,12 @@
 <script>
     export default {
 
-        name: "Logout"
+        name: "Logout",
+        data () {
+
+            return {};
+
+        }
 
     };
 </script>

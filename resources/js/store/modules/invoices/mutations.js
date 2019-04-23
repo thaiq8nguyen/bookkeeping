@@ -23,16 +23,16 @@ export default {
 
     },
 
-    DELETE_INVOICE_ITEMS (state) {
+    DELETE_ALL_INVOICE_ITEMS (state) {
 
         state.invoiceItems = [];
-        
+
     },
 
     SET_SAVING (state, value) {
 
         state.saving = value;
-        
+
     },
 
     SET_NEW_TRANSACTION_ID (state, value) {
@@ -44,7 +44,7 @@ export default {
     SET_MEMO (state, memo) {
 
         state.memo = memo;
-        
+
     }
 
 };

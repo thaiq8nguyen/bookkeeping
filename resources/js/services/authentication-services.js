@@ -1,25 +1,10 @@
 import Vue from "vue";
 import Plugins from "Plugins";
-import { loadState } from "../store/plugins/persist-states";
 
 let Services = new Vue();
 Vue.use(Plugins);
 
 export default {
-
-    init () {
-
-        if (loadState("authentications")) {
-
-            return loadState("authentications");
-
-        } else {
-
-            return null;
-            
-        }
-
-    },
 
     login (credential) {
 
@@ -36,6 +21,6 @@ export default {
     user () {
 
         return Services.apiClient.get("/user");
-        
+
     }
 };

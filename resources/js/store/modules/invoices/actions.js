@@ -34,29 +34,33 @@ export default {
     },
 
     createTransaction ({ commit, state, rootGetters }) {
-     
+
         const transaction = {
             "renterID": rootGetters["Renters/renterID"],
             "date": rootGetters.date,
             "lineItems": state.invoiceItems,
+            "memo": state.memo,
         };
+
         return new Promise((resolve, reject) => {
 
             InvoiceServices.createInvoice(transaction)
             .then(response => {
 
+                commit("DELETE_ALL_INVOICE_ITEMS");
+                commit("SET_MEMO", "");
                 commit("SET_NEW_TRANSACTION_ID", response.data.transactionID);
                 resolve(response.data.transactionID);
 
             })
             .catch(error => {
-                
+
                 reject(error);
 
             });
 
         });
-        
+
     },
 
     async createAndUploadInvoice ({ commit, dispatch, getters }) {
@@ -77,7 +81,7 @@ export default {
 
             commit("SET_SAVING", false);
             dispatch("Dialogs/showDialog", { name: "invoiceCreatedConfirmation", visibility: true }, { root: true });
-            
+
         })
         .catch(errors => {
 
@@ -136,7 +140,7 @@ export default {
             .then(response => {
 
                 Router.push("/dashboard");
-            
+
             })
             .catch(errors => {
 
