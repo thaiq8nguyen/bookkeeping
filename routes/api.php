@@ -21,7 +21,13 @@ Route::post('/login', 'AuthenticationController@login');
 
 Route::group(['middleware' => 'auth:api'], function () {
 
+    // Authentication
+
+    Route::post('/logout', 'AuthenticationController@logout');
+
     Route::get('/expense-accounts', 'ExpenseAccountController@getExpenseAccounts');
+
+    // Renters
 
     Route::get('/renters', 'RenterController@getRenters');
 
@@ -42,12 +48,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/files/{transactionID}', 'FileController@downloadFile');
 
 
-    Route::post('/logout', 'AuthenticationController@logout');
+    // Renter Notifications
+
+    Route::get('/settings/renters-notifications', 'RenterNotificationController@getSettings');
+
+    Route::put('/settings/renters-notifications', 'RenterNotificationController@updateSettings');
+
 });
 
-Route::get('/settings/renters-notifications', 'RenterNotificationController@getSettings');
 
-Route::put('/settings/renters-notifications', 'RenterNotificationController@updateSettings');
 
 
 

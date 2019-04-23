@@ -23,7 +23,6 @@ class UserRepository implements UserInterface
             return $result;
         }
 
-
         return false;
     }
 

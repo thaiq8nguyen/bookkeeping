@@ -2744,6 +2744,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       email: "",
       password: "",
+      remember: false,
+      authenticatingError: "",
+      isAuthenticating: false,
       dictionary: {
         custom: {
           email: {
@@ -2757,18 +2760,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    isAuthenticating: function isAuthenticating() {
-      return this.$store.getters["Authentications/isAuthenticating"];
-    },
-    errorMessage: function errorMessage() {
-      return this.$store.getters["Authentications/errorMessage"];
-    },
     alert: function alert() {
       return this.$route.query.action === "logout";
+    },
+    url: function url() {
+      return this.$router.currentRoute.query.url;
     }
   },
   mounted: function mounted() {
-    this.$store.dispatch("Authentications/init");
     this.$validator.localize("en", this.dictionary);
   },
   methods: {
@@ -2782,9 +2781,26 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     login: function login() {
+      var _this2 = this;
+
+      this.isAuthenticating = true;
       this.$store.dispatch("Authentications/login", {
         email: this.email,
         password: this.password
+      }).then(function () {
+        if (_this2.url !== undefined) {
+          _this2.$router.push(_this2.url);
+        } else {
+          _this2.$router.push("/dashboard");
+        }
+      }).catch(function (errors) {
+        if (errors.status === 401) {
+          _this2.authenticatingError = "Incorrect email or password";
+        }
+
+        _this2.$store.dispatch("Authentications/resetAuthentication");
+      }).then(function () {
+        _this2.isAuthenticating = false;
       });
     }
   }
@@ -35289,7 +35305,7 @@ var render = function() {
                                     1
                                   ),
                                   _vm._v(" "),
-                                  _vm.errorMessage
+                                  _vm.authenticatingError
                                     ? _c("v-card-text", [
                                         _c(
                                           "p",
@@ -35297,7 +35313,11 @@ var render = function() {
                                             staticClass:
                                               "subheading primary--text"
                                           },
-                                          [_vm._v(_vm._s(_vm.errorMessage))]
+                                          [
+                                            _vm._v(
+                                              _vm._s(_vm.authenticatingError)
+                                            )
+                                          ]
                                         )
                                       ])
                                     : _vm._e(),
@@ -75744,11 +75764,10 @@ function _requiresAuth() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log(to.fullPath);
-            _context.next = 3;
+            _context.next = 2;
             return Store__WEBPACK_IMPORTED_MODULE_7__["default"].getters["Authentications/isAuthenticated"];
 
-          case 3:
+          case 2:
             if (Store__WEBPACK_IMPORTED_MODULE_7__["default"].getters["Authentications/isAuthenticated"]) {
               next();
             } else {
@@ -75760,7 +75779,7 @@ function _requiresAuth() {
               });
             }
 
-          case 4:
+          case 3:
           case "end":
             return _context.stop();
         }
@@ -76144,31 +76163,22 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  init: function init(_ref) {
+  init: function init(_ref) {//commit("SET_ERROR_MESSAGE", "");
+
     var commit = _ref.commit;
-    commit("SET_ERROR_MESSAGE", "");
   },
   login: function login(_ref2, credential) {
     var commit = _ref2.commit,
         dispatch = _ref2.dispatch;
-    return Services_authentication_services__WEBPACK_IMPORTED_MODULE_0__["default"].login(credential).then(function (response) {
-      commit("SET_AUTHENTICATION", response.data.result);
-      var url = Router__WEBPACK_IMPORTED_MODULE_1__["default"].currentRoute.query.url;
-
-      if (url !== undefined) {
-        Router__WEBPACK_IMPORTED_MODULE_1__["default"].push(url);
-      } else {
-        Router__WEBPACK_IMPORTED_MODULE_1__["default"].push("dashboard");
-      }
-    }).catch(function (errors) {
-      if (errors.response.status === 401) {
-        commit("SET_ERROR_MESSAGE", "Incorrect email or password");
-      }
-
-      console.log(errors);
-      dispatch("resetAuthentication");
-    }).then(function () {
-      commit("SET_IS_AUTHENTICATING", false);
+    return new Promise(function (resolve, reject) {
+      return Services_authentication_services__WEBPACK_IMPORTED_MODULE_0__["default"].login(credential).then(function (response) {
+        commit("SET_AUTHENTICATION", response.data.result);
+        resolve();
+      }).catch(function (errors) {
+        if (errors.response) {
+          reject(errors.response);
+        }
+      });
     });
   },
   logout: function logout(_ref3) {
@@ -76858,7 +76868,7 @@ __webpack_require__.r(__webpack_exports__);
 var state = {
   renterNotificationSettings: [],
   // Dialog
-  updateRenterNotificationDialog: true
+  updateRenterNotificationDialog: false
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
   namespaced: true,

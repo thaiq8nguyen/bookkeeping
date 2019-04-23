@@ -4,45 +4,30 @@ import router from "Router";
 export default {
     init ({ commit }) {
 
-        commit("SET_ERROR_MESSAGE", "");
+        //commit("SET_ERROR_MESSAGE", "");
 
     },
 
     login ({ commit, dispatch }, credential) {
 
-        return AuthenticationServices.login(credential)
-        .then(response => {
+        return new Promise((resolve, reject) => {
 
-            commit("SET_AUTHENTICATION", response.data.result);
+            return AuthenticationServices.login(credential)
+                .then(response => {
 
-            let url = router.currentRoute.query.url;
+                    commit("SET_AUTHENTICATION", response.data.result);
+                    resolve();
 
-            if (url !== undefined) {
+                })
+                .catch(errors => {
 
-                router.push(url);
+                    if (errors.response) {
 
-            } else {
+                        reject(errors.response);
 
-                router.push("dashboard");
+                    }
 
-            }
-
-        })
-        .catch(errors => {
-
-            if (errors.response.status === 401) {
-
-                commit("SET_ERROR_MESSAGE", "Incorrect email or password");
-
-            }
-
-            console.log(errors);
-            dispatch("resetAuthentication");
-
-        })
-        .then(() => {
-
-            commit("SET_IS_AUTHENTICATING", false);
+                });
 
         });
 

@@ -8,7 +8,7 @@ const state = {
 	renterNotificationSettings: [],
 
 	// Dialog
-	updateRenterNotificationDialog: true,
+	updateRenterNotificationDialog: false,
 
 };
 

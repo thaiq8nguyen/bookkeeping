@@ -56,7 +56,7 @@ const routes = [
 ];
 
 async function requiresAuth (to, from, next) {
-    console.log(to.fullPath);
+
     await Store.getters["Authentications/isAuthenticated"];
 
     if (Store.getters["Authentications/isAuthenticated"]) {

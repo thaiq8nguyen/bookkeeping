@@ -33,8 +33,8 @@
                                 >
                                 </v-text-field>
                             </v-card-text>
-                            <v-card-text v-if="errorMessage">
-                                <p class="subheading primary--text">{{ errorMessage }}</p>
+                            <v-card-text v-if="authenticatingError">
+                                <p class="subheading primary--text">{{ authenticatingError }}</p>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
@@ -58,6 +58,9 @@ export default {
         return {
             email: "",
             password: "",
+            remember: false,
+            authenticatingError: "",
+            isAuthenticating: false,
             dictionary: {
                 custom: {
                     email: {
@@ -73,26 +76,19 @@ export default {
     },
     computed: {
 
-        isAuthenticating () {
-
-            return this.$store.getters["Authentications/isAuthenticating"];
-
-        },
-
-        errorMessage () {
-
-            return this.$store.getters["Authentications/errorMessage"];
-
-        },
         alert () {
 
             return this.$route.query.action === "logout";
+
+        },
+        url () {
+
+            return this.$router.currentRoute.query.url;
 
         }
     },
     mounted () {
 
-        this.$store.dispatch("Authentications/init");
         this.$validator.localize("en", this.dictionary);
 
     },
@@ -110,9 +106,39 @@ export default {
             });
 
         },
+
         login () {
 
-            this.$store.dispatch("Authentications/login", { email: this.email, password: this.password });
+            this.isAuthenticating = true;
+            this.$store.dispatch("Authentications/login", { email: this.email, password: this.password })
+                    .then(() => {
+
+                        if (this.url !== undefined) {
+
+                            this.$router.push(this.url);
+
+                        } else {
+
+                            this.$router.push("/dashboard");
+
+                        }
+
+                    })
+                    .catch((errors) => {
+
+                        if (errors.status === 401) {
+
+                            this.authenticatingError = "Incorrect email or password";
+
+                        }
+                        this.$store.dispatch("Authentications/resetAuthentication");
+
+                    })
+                    .then(() => {
+
+                        this.isAuthenticating = false;
+
+                    });
 
         }
     },
