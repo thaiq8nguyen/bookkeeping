@@ -2802,7 +2802,7 @@ __webpack_require__.r(__webpack_exports__);
             _this2.$router.push(_this2.url);
           } else {
             _this2.$router.push({
-              name: "UserDashboard"
+              name: "RenterDashboard"
             });
           }
         }

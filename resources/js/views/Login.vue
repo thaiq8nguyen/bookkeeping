@@ -135,7 +135,7 @@ export default {
 
                             } else {
 
-                                this.$router.push({ name: "UserDashboard" });
+                                this.$router.push({ name: "RenterDashboard" });
 
                             }
 
