@@ -2995,9 +2995,13 @@ __webpack_require__.r(__webpack_exports__);
       return this.$store.getters["Authentications/renterID"];
     },
     totalTransactionAmount: function totalTransactionAmount() {
-      return this.transaction.items.reduce(function (sum, item) {
-        return sum + parseFloat(item.amount);
-      }, 0);
+      if (this.transaction) {
+        return this.transaction.items.reduce(function (sum, item) {
+          return sum + parseFloat(item.amount);
+        }, 0);
+      } else {
+        return 0;
+      }
     }
   },
   created: function created() {

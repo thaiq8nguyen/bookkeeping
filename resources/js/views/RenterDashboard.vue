@@ -123,11 +123,19 @@
 			},
 			totalTransactionAmount () {
 
-				return this.transaction.items.reduce((sum, item) => {
+				if (this.transaction) {
 
-					return sum + parseFloat(item.amount);
+					return this.transaction.items.reduce((sum, item) => {
 
-				}, 0);
+						return sum + parseFloat(item.amount);
+
+					}, 0);
+
+				} else {
+
+					return 0;
+
+				}
 
 			}
 		},

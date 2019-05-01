@@ -22,7 +22,7 @@ class UserRepository implements UserInterface
                 'role' => $user->roles->first()->name,
             ];
 
-            if ($user->roles->first->name == 'renter' && $user->roles()->exists()) {
+            if ($user->roles->first()->name == 'renter' && $user->renter()->exists()) {
                 $result['renterID'] = $user->renter->id;
             }
 
