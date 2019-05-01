@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Renter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Bookkeeping\Transaction\TransactionInterface as TransactionInterface;
@@ -40,5 +41,19 @@ class TransactionController extends BaseController
         $result = $this->transaction->deleteTransaction($id);
 
         return $this->sendResponse($result, 'The transaction has been deleted');
+    }
+
+    public function getRenterTransactions($renterID)
+    {
+        $result = $this->transaction->getRenterTransactions($renterID);
+
+        return $this->sendResponse($result, 'The renter transactions retrieved successfully');
+    }
+
+    public function getRenterTransaction($renterID, $transactionID)
+    {
+        $result = $this->transaction->getRenterTransaction($renterID, $transactionID);
+
+        return $this->sendResponse($result, 'The renter transaction retrieved successfully');
     }
 }

@@ -22,8 +22,8 @@ class Renter extends Model
             ->as('setting')
             ->withPivot(['is_active'])
             ->withTimestamps();
-
     }
+
     public function lineItems()
     {
         return $this->transactions()->join('line_items', 'transactions.id', 'line_items.transaction_id')
@@ -34,6 +34,13 @@ class Renter extends Model
     {
         return ucfirst($this->first_name). ' ' .ucfirst($this->last_name);
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+
 
 
 }

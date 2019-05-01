@@ -30,5 +30,15 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role')->as('roles');
+    }
+
+    public function renter()
+    {
+        return $this->hasOne('App\Renter');
+    }
+
 
 }

@@ -2,11 +2,6 @@ import AuthenticationServices from "Services/authentication-services";
 import router from "Router";
 
 export default {
-    init ({ commit }) {
-
-        //commit("SET_ERROR_MESSAGE", "");
-
-    },
 
     login ({ commit, dispatch }, credential) {
 
@@ -31,14 +26,14 @@ export default {
 
         });
 
-},
+    },
 
     logout ({ dispatch }) {
 
         return AuthenticationServices.logout()
         .then(response => {
 
-            router.push({ path: "login", query: { action: "logout" } });
+            router.push({ name: "Login", query: { action: "logout" } });
             dispatch("resetAuthentication");
 
         })
@@ -52,7 +47,7 @@ export default {
 
     resetAuthentication ({ commit }) {
 
-        commit("SET_AUTHENTICATION", { accessToken: "", expiration: "", userFullName: "" });
+        commit("SET_AUTHENTICATION", { accessToken: "", expiration: "", userFullName: "", role: "" });
         localStorage.removeItem("state");
 
     }

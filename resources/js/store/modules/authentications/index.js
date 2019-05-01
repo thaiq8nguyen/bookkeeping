@@ -9,7 +9,9 @@ const state = {
     accessToken: "",
     expiration: "",
     errorMessage: "",
-    
+    role: "",
+    renterID: "",
+
 };
 export default ({
     namespaced: true,

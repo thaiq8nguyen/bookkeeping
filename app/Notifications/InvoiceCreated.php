@@ -64,8 +64,6 @@ class InvoiceCreated extends Notification implements ShouldQueue
     {
         return (new NexmoMessage)
             ->content('Thai: Hello '. $this->invoice->transactionable->full_name .
-                '. Your invoice is ready at '. URL::to('/').'/#/invoice/'.
-                $this->invoice->id);
-
+                '. Your invoice is ready at '. URL::to('/').'/#/user/dashboard');
     }
 }

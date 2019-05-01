@@ -25,35 +25,55 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('/logout', 'AuthenticationController@logout');
 
-    Route::get('/expense-accounts', 'ExpenseAccountController@getExpenseAccounts');
 
-    // Renters
+    Route::group(['middleware' => 'admin'], function () {
 
-    Route::get('/renters', 'RenterController@getRenters');
+        // Renters******************************************************************************************************
 
-
-    // Transactions
-    Route::get('/transactions', 'TransactionController@getTransactions');
-
-    Route::get('/transactions/{id}', 'TransactionController@getTransaction');
-
-    Route::post('/transactions', 'TransactionController@createTransaction');
-
-    Route::delete('/transactions/{id}', 'TransactionController@deleteTransaction');
-
-    // Transactions
-
-    Route::post('/files', 'FileController@uploadFile');
-
-    Route::get('/files/{transactionID}', 'FileController@downloadFile');
+        Route::get('/renters', 'RenterController@getRenters');
 
 
-    // Renter Notifications
+        // Transactions*************************************************************************************************
 
-    Route::get('/settings/renters-notifications', 'RenterNotificationController@getSettings');
+        Route::get('/transactions', 'TransactionController@getTransactions');
 
-    Route::put('/settings/renters-notifications', 'RenterNotificationController@updateSettings');
+        Route::post('/transactions', 'TransactionController@createTransaction');
 
+        Route::delete('/transactions/{id}', 'TransactionController@deleteTransaction');
+
+        Route::get('/transactions/{id}', 'TransactionController@getTransaction');
+
+        // Files********************************************************************************************************
+
+        Route::post('/files', 'FileController@uploadFile');
+
+        Route::get('/files/{transactionID}', 'FileController@downloadFile');
+
+        // Renter Notifications*****************************************************************************************
+
+        Route::get('/settings/renters-notifications', 'RenterNotificationController@getSettings');
+
+        Route::put('/settings/renters-notifications', 'RenterNotificationController@updateSettings');
+
+        // Accounts*****************************************************************************************************
+
+        Route::get('/expense-accounts', 'ExpenseAccountController@getExpenseAccounts');
+    });
+
+    Route::group(['middleware' => ['renter', 'renter.id']], function () {
+
+        // Transactions*************************************************************************************************
+
+        Route::get('/transactions/renters/{renterID}', 'TransactionController@getRenterTransactions');
+
+        Route::group(['middleware' => ['renter.transaction']], function () {
+
+            Route::get(
+                '/renters/{renterID}/transactions/{transactionID}',
+                'TransactionController@getRenterTransaction'
+            );
+        });
+    });
 });
 
 

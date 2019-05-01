@@ -1,5 +1,4 @@
 import TransactionServices from "Services/transaction-services";
-import PDFServices from "Services/pdf-services";
 
 export default {
 
@@ -9,7 +8,7 @@ export default {
         .then(response => {
 
             commit("SET_TRANSACTIONS", response.data);
-            
+
         })
         .catch(errors => {
 
@@ -34,4 +33,36 @@ export default {
         });
 
     },
+
+    getRenterTransactions ({ commit }, renterID) {
+
+        return TransactionServices.getRenterTransactions(renterID)
+            .then(response => {
+
+                commit("SET_TRANSACTIONS", response.data.result);
+
+            })
+            .catch(errors => {
+
+                console.log(errors);
+
+            });
+
+    },
+
+    getRenterTransaction ({ commit }, request) {
+
+        return TransactionServices.getRenterTransaction(request)
+            .then(response => {
+                console.log(response.data);
+                commit("SET_TRANSACTION", response.data.result);
+
+            })
+            .catch(errors => {
+
+                console.log(errors);
+
+            });
+
+    }
 };

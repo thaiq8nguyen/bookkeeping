@@ -35,11 +35,10 @@
                     {{ userFullName }}
 					<v-icon right>keyboard_arrow_down</v-icon>
 				</v-btn>
-
 				<v-list>
 					<template v-for="(item, key) in items">
-						<v-list-tile :key="key">
-							<v-list-tile-title @click="logout">{{ item.name }}</v-list-tile-title>
+						<v-list-tile :key="key" @click="logout">
+							<v-list-tile-title>{{ item.name }}</v-list-tile-title>
 						</v-list-tile>
 					</template>
 				</v-list>
@@ -50,13 +49,14 @@
 
 <script>
     export default {
-        name: "TopNavigationBar",
-	    props: {
-        	title: {
-        		default: "",
-		        type: String,
-	        }
-	    },
+		name: "TopNavigationBar",
+		props: {
+
+			title: {
+				default: "",
+				type: String,
+			}
+		},
 		data () {
 
 			return {

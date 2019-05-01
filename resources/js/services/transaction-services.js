@@ -11,15 +11,20 @@ export default ({
         return Services.apiClient.get("/transactions");
 
     },
-
     getTransaction (id) {
 
         return Services.apiClient.get("/transactions/" + id);
 
     },
+    getRenterTransactions (renterID) {
 
-    createTransaction (transaction) {
-    
+        return Services.apiClient.get("/transactions/renters/" + renterID);
+
     },
+    getRenterTransaction (request) {
+
+        return Services.apiClient.get(`/renters/${request.renterID}/transactions/${request.transactionID}`);
+
+    }
 
 });

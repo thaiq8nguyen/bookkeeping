@@ -12,8 +12,10 @@
 */
 use Illuminate\Support\Facades\Mail;
 use App\Renter;
+use App\User;
 use App\Transaction;
 use Nexmo\Laravel\Facade\Nexmo;
+use Illuminate\Support\Facades\Auth;
 
 use App\Notifications\InvoiceCreated;
 
@@ -62,4 +64,32 @@ Route::get('/', 'AppController@index');
         ->get();
 
     return $transactions;
+});*/
+
+/*Route::get('/role', function(){
+    $user = User::find(1);
+
+    $roles = [];
+
+    foreach ($user->roles as $role) {
+        $roles[] = $role->name;
+    }
+
+    return $user->roles->first()->name;
+
+});*/
+/*Route::get('/transaction', function () {
+    $transactionID = 57;
+
+    $renter = Renter::find(1);
+
+    $transaction = Transaction::find(57);
+
+    $another = $renter->transactions()->where('id',57)->first();
+
+    /*$renter = Renter::with(['lineItems' => function($query) use($transactionID) {
+        $query->where('transactions.id', $transactionID);
+    }])->where('id',1)->first();
+
+    return $another->lineItems;
 });*/

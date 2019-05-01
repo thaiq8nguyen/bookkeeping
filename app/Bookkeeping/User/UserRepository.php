@@ -12,13 +12,19 @@ class UserRepository implements UserInterface
     {
         if (Auth::attempt(['email' => $credential['email'], 'password' => $credential['password']])) {
             $user = Auth::user();
+
             $token = $user->createToken('access');
 
             $result = [
-                "accessToken" => $token->accessToken,
+                'accessToken' => $token->accessToken,
                 'expiration' => Carbon::parse($token->token->expires_at)->toDateTimeString(),
-                'userFullName' => $user->name
+                'userFullName' => $user->name,
+                'role' => $user->roles->first()->name,
             ];
+
+            if ($user->roles->first->name == 'renter' && $user->roles()->exists()) {
+                $result['renterID'] = $user->renter->id;
+            }
 
             return $result;
         }

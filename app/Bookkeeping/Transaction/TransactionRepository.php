@@ -76,6 +76,60 @@ class TransactionRepository implements TransactionInterface
         return $results;
     }
 
+    public function getRenterTransactions($renterID)
+    {
+        $results = [];
+
+        $year = Carbon::parse('first day of January')->toDateString();
+
+        $transactions = Transaction::with(['transactionable' => function ($query) use ($renterID) {
+            $query->select(["id",'first_name', 'last_name'])->where('id', $renterID);
+        },
+            'lineItemsTotalAmount',
+            'file' => function ($query) {
+                $query->select(['id', 'fileable_id']);
+            }
+        ])
+            ->where('date', '>=', $year)
+            ->orderBy('date', 'desc')
+            ->get();
+
+
+        foreach ($transactions as $transaction) {
+            $result = [
+                'transactionID' => $transaction->id, 'date' => $transaction->date, 'memo' => $transaction->memo,
+                'renter' => $transaction->transactionable,
+                'totalAmount' => $transaction->lineItemsTotalAmount['total'],
+                'file' => $transaction->file
+            ];
+
+            array_push($results, $result);
+        }
+        return $results;
+    }
+
+    public function getRenterTransaction($renterID, $transactionID)
+    {
+        $items = [];
+        $renter = Renter::find($renterID);
+
+        $transaction = $renter->transactions()->where('id', $transactionID)->first();
+
+        foreach ($transaction->lineItems as $lineItem) {
+            $items[] = ['account' => $lineItem->account->account_name, 'amount' => $lineItem->amount];
+        }
+
+        $result = [
+            'items' => $items,
+            'date' => $transaction->date,
+            'dueDate' => $transaction->due_date,
+            'invoicingMonth' => $transaction->invoicing_month,
+            'memo' => $transaction->memo
+        ];
+
+        return $result;
+    }
+
     public function createTransaction($transaction)
     {
         $renter = Renter::find($transaction['renterID']);

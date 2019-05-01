@@ -113,13 +113,31 @@ export default {
             this.$store.dispatch("Authentications/login", { email: this.email, password: this.password })
                     .then(() => {
 
-                        if (this.url !== undefined) {
+                        let role = this.$store.getters["Authentications/role"];
 
-                            this.$router.push(this.url);
+                        if (role === "admin") {
+
+                            if (this.url !== undefined) {
+
+                                this.$router.push(this.url);
+
+                            } else {
+
+                                this.$router.push({ name: "Dashboard" });
+
+                            }
 
                         } else {
 
-                            this.$router.push("/dashboard");
+                            if (this.url !== undefined) {
+
+                                this.$router.push(this.url);
+
+                            } else {
+
+                                this.$router.push({ name: "UserDashboard" });
+
+                            }
 
                         }
 
